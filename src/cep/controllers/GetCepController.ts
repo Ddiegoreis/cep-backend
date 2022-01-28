@@ -1,11 +1,16 @@
 import { Request, Response } from "express"
-import axios from 'axios'
+
+import { GetCepService } from "../services/GetCepService"
 
 class GetCepController {
+  private getCepService: GetCepService
+
   async handle(request: Request, response: Response): Promise<Response> {
+    this.getCepService = new GetCepService()
+
     const { codigo } = request.cep
 
-    const { data } = await axios.get(`https://ws.apicep.com/cep.json?code=${codigo}`)
+    const data = await this.getCepService.execute(codigo)
 
     return response.json(data)
   }
